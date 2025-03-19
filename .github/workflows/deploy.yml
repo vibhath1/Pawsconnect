@@ -1,0 +1,38 @@
+name: Deploy React App
+
+on:
+  push:
+    branches:
+      - main  # Runs when code is pushed to the main branch
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # Change to your Node.js version
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests (Optional)
+        run: npm test
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages (Optional)
+        if: success()
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages  # The branch to deploy to
+          folder: build  # The folder containing the React build files
